@@ -1,0 +1,17 @@
+#!/bin/bash
+
+
+echo "**************************************************************************************************"
+echo "                                 "Gossip Status on Cassandra "                                    "
+echo "**************************************************************************************************"
+
+
+servers=("Node1" "Node2")
+
+for server in "${servers[@]}"
+do
+  echo "Checking gossip status on $server      ---------->>    `ssh -q casusr@$server "/opt/cassandra/bin/nodetool statusgossip"`"
+done
+
+
+echo "**************************************************************************************************"
