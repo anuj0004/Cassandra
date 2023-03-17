@@ -1,0 +1,25 @@
+#!/bin/bash
+
+NODES=(node1 node2)
+
+for NODE in "${NODES[@]}"
+do
+  echo "******************************************************************************"
+  echo "Stopping Cassandra process on $NODE"
+  ssh -q casusr@$NODE "/opt/cassandra/bin/nodetool stopdaemon"
+
+  echo "Starting Cassandra process on $NODE"
+  ssh -q casusr@$NODE "/opt/cassandra/bin/cassandra > /dev/null 2>&1"
+  sleep 30
+  echo "Waiting for $NODE to be completely started"
+  STATE=$(ssh -q casusr@$NODE "/opt/cassandra/bin/nodetool status | grep $NODE | awk '{print \$1}'")
+  while [ "$STATE" != "UN" ]
+  do
+    sleep 10
+    STATE=$(ssh -q casusr@$NODE "/opt/cassandra/bin/nodetool status | grep $NODE | awk '{print \$1}'")
+  done
+  echo "$NODE has rejoined the cluster and is in the UP state"
+done
+echo "**************************************************************************************************"
+echo "                                 "Rolling bounce completed "                                      "
+echo "**************************************************************************************************"
