@@ -23,6 +23,3 @@ In conclusion, as a Cassandra DBA, you play a critical role in ensuring that the
 
 
 
-
-
-Regenerate response
